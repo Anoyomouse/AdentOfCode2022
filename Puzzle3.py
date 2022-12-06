@@ -18,9 +18,7 @@ for x in [x for x in zip(bag_data[::3], bag_data[1::3], bag_data[2::3])]:
         points_a += (tr.index(v) + 1)
         common_a += v
 
-    groups = [set(y) for y in x]
-    common = groups[0].intersection(groups[1], groups[2])
-    v = common.pop()
+    v = set.intersection(*map(set, x)).pop()
     # print(f"Common: {v} - {tr.index(v) + 1}")
     points_b += (tr.index(v) + 1)
     common_b += v
