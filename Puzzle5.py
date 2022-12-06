@@ -36,32 +36,27 @@ for x in data:
     stack_from = int(words[3]) - 1
     stack_to = int(words[5]) - 1
 
-    from_data = stacks_a[stack_from][-move_num:]
-    from_data.reverse()
+    stacks_a[stack_to] = stacks_a[stack_to] + [x for x in reversed(stacks_a[stack_from][-move_num:])]
+    # If you use the following line instead of the previous one it messes up BOTH of the outputs ...
+    # stacks_a[stack_to].extend(reversed(stacks_a[stack_from][-move_num:]))
     stacks_a[stack_from] = stacks_a[stack_from][:-move_num]
-    stacks_a[stack_to] = stacks_a[stack_to] + from_data
 
-    from_data = stacks_b[stack_from][-move_num:]
+    stacks_b[stack_to].extend(stacks_b[stack_from][-move_num:])
     stacks_b[stack_from] = stacks_b[stack_from][:-move_num]
-    stacks_b[stack_to] = stacks_b[stack_to] + from_data
 
 # %%
+
+def print_results(stacks, answer):
+    for x in range(len(stacks)):
+        print(f'{x + 1}) ' + ' '.join(stacks[x]))
+
+    top_box = [x[-1] for x in stacks]
+    print(''.join(top_box) + f" - {answer}")
+
 print(" === A ===")
-for x in stacks_a:
-    print(' '.join(x))
-
-top_box_a = [x[-1] for x in stacks_a]
-
-print(top_box_a)
-print(''.join(top_box_a) + " - TDCHVHJTG")
+print_results(stacks_a, "TDCHVHJTG")
 
 print(" === B ===")
-for x in stacks_b:
-    print(' '.join(x))
-
-top_box_b = [x[-1] for x in stacks_b]
-
-print(top_box_b)
-print(''.join(top_box_b) + " - NGCMPJLHV")
+print_results(stacks_b, "NGCMPJLHV")
 
 # %%
