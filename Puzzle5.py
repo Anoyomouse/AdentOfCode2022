@@ -19,8 +19,11 @@ start_stacks = [x[::-1] for x in stacks]
 
 del stacks
 # %%
-stacks_a = [x for x in start_stacks]
-stacks_b = [x for x in start_stacks]
+
+from copy import deepcopy
+
+stacks_a = deepcopy(start_stacks)
+stacks_b = deepcopy(start_stacks)
 start = False
 for x in data:
     x = x.strip('\n')
@@ -36,9 +39,7 @@ for x in data:
     stack_from = int(words[3]) - 1
     stack_to = int(words[5]) - 1
 
-    stacks_a[stack_to] = stacks_a[stack_to] + [x for x in reversed(stacks_a[stack_from][-move_num:])]
-    # If you use the following line instead of the previous one it messes up BOTH of the outputs ...
-    # stacks_a[stack_to].extend(reversed(stacks_a[stack_from][-move_num:]))
+    stacks_a[stack_to].extend(reversed(stacks_a[stack_from][-move_num:]))
     stacks_a[stack_from] = stacks_a[stack_from][:-move_num]
 
     stacks_b[stack_to].extend(stacks_b[stack_from][-move_num:])
