@@ -5,22 +5,25 @@ tr += [x.upper() for x in tr]
 
 data = open("Puzzle3_input.txt",'r')
 points_a = 0
+common_a = ""
 points_b = 0
-bag_data = data.readlines()
+common_b = ""
+bag_data = [x.strip(' \r\n') for x in data.readlines()]
 for x in [x for x in zip(bag_data[::3], bag_data[1::3], bag_data[2::3])]:
     for y in x:
-        y = y.strip(' \t\n')
         mid = len(y)//2
         fp,sp = set(y[:mid]), set(y[mid:])
         v = list(fp.intersection(sp))
         #print(f"Common: {v[0]} - {tr.index(v[0]) + 1}")
         points_a += (tr.index(v[0]) + 1)
+        common_a += v[0]
 
-    groups = [set(y.strip(' \t\n')) for y in x]
+    groups = [set(y) for y in x]
     common = groups[0].intersection(groups[1], groups[2])
     v = list(common)
     # print(f"Common: {v[0]} - {tr.index(v[0]) + 1}")
     points_b += (tr.index(v[0]) + 1)
+    common_b += v[0]
 
-print(f"Total: {points_a} - 8039")
-print(f"Total: {points_b} - 2510")
+print(f"Total: {points_a} - 8039 - {common_a}")
+print(f"Total: {points_b} - 2510 - {common_b}")
