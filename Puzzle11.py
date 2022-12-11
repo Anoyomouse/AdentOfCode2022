@@ -6,7 +6,7 @@ class Monkey:
         self.number = int
         self.items = []
         self.activity = 0
-        self.supermodulo = 0
+        self.common_divisor = 0
 
         self.test_results = {}
         for x in _6_lines:
@@ -46,7 +46,7 @@ class Monkey:
             # pass_to = self.test_results[self.test_func(new)]
             pass_to = self.test_results[new % self.divisor == 0]
 
-            new = new % self.supermodulo
+            new = new % self.common_divisor
             monkeys[pass_to].recieve_item(new)
         self.items = []
 
@@ -65,12 +65,12 @@ while True:
     if start >= len(data):
         break
 
-supermodulo = 1
+common_divisor = 1
 for x in monkeys:
-    supermodulo *= monkeys[x].divisor
+    common_divisor *= monkeys[x].divisor
 
 for x in monkeys:
-    monkeys[x].supermodulo = supermodulo
+    monkeys[x].common_divisor = common_divisor
 
 def do_output(monkeys, answer):
     top_monkeys = sorted([monkeys[x].activity for x in monkeys], reverse=True)
