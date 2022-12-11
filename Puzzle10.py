@@ -11,13 +11,13 @@ class Logic:
         self.screen = ""
 
     def draw_sprite(self, position):
-        self.sprite_image = list(" " * 40)
+        self.sprite_image = list(" " * 42)
         if position <= 0:
             for x in range(2 + position): # if pos in [-1, 0]
                 self.sprite_image[x] = "#"
-        elif position >= 39:
-            for x in range(40 - position):
-                self.sprite_image[x] = "#"
+        # elif position >= 39:
+        #     for x in range(40 - position):
+        #         self.sprite_image[x] = "#"
         else:
             for x in range(3):
                 self.sprite_image[x + position - 1] = "#"
