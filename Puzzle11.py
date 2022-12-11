@@ -2,11 +2,12 @@
 from typing import List, Dict 
 
 class Monkey:
-    def __init__(self, _6_lines : List[str]):
+    def __init__(self, _6_lines : List[str], part_A):
         self.number = int
         self.items = []
         self.activity = 0
         self.common_divisor = 0
+        self.part_A = part_A
 
         self.test_results = {}
         for x in _6_lines:
@@ -41,7 +42,8 @@ class Monkey:
             #- print(f'Worry level is now: {new}')
             
             # Part A .. Part B doesn't divide by 3
-            #new = new // 3
+            if self.part_A:
+                new = new // 3
             #- print(f'Worry has calmed down to: {new}')
             # pass_to = self.test_results[self.test_func(new)]
             pass_to = self.test_results[new % self.divisor == 0]
@@ -51,43 +53,49 @@ class Monkey:
         self.items = []
 
 # %%
+def load_data(part_A):
+    data = [x.strip('\n') for x in open('Puzzle11_input.txt', 'r').readlines()]
 
-# %%
-data = [x.strip('\n') for x in open('Puzzle11_input.txt', 'r').readlines()]
+    monkeys = {}
+    start = 0
+    while True:
+        monkey = Monkey(data[start:start + 6], part_A)
+        monkeys[monkey.number] = monkey
+        del monkey
+        start += 7
+        if start >= len(data):
+            break
 
-monkeys = {}
-start = 0
-while True:
-    monkey = Monkey(data[start:start + 6])
-    monkeys[monkey.number] = monkey
-    del monkey
-    start += 7
-    if start >= len(data):
-        break
+    common_divisor = 1
+    for x in monkeys:
+        common_divisor *= monkeys[x].divisor
 
-common_divisor = 1
-for x in monkeys:
-    common_divisor *= monkeys[x].divisor
+    for x in monkeys:
+        monkeys[x].common_divisor = common_divisor
 
-for x in monkeys:
-    monkeys[x].common_divisor = common_divisor
+    def do_output(monkeys, answer):
+        top_monkeys = sorted([monkeys[x].activity for x in monkeys], reverse=True)
+        shenanigans = top_monkeys[0] * top_monkeys[1]
+        print(f"Monkey Buisness: {shenanigans} - ({answer})")
 
-def do_output(monkeys, answer):
-    top_monkeys = sorted([monkeys[x].activity for x in monkeys], reverse=True)
-    shenanigans = top_monkeys[0] * top_monkeys[1]
-    print(f"Monkey Buisness: {shenanigans} - ({answer})")
+    rounds = 10000
+    if part_A:
+        rounds = 20
+    # Part A - 20, Part B - 10000
+    # for round in range(20):
+    for round in range(rounds):
+        # print(f"Round {round}")
+        for n in monkeys:
+            x = monkeys[n]
+            # print(f"    -- Monkey {x.number} -- Items: {x.items} -- Item: {len(x.items)}")
+            x.do_turn(monkeys)
+            # print(f"                -- Items: {x.items} -- Item: {len(x.items)}")
 
-# Part A - 20, Part B - 10000
-# for round in range(20):
-for round in range(10000):
-    # print(f"Round {round}")
-    for n in monkeys:
-        x = monkeys[n]
-        # print(f"    -- Monkey {x.number} -- Items: {x.items} -- Item: {len(x.items)}")
-        x.do_turn(monkeys)
-        # print(f"                -- Items: {x.items} -- Item: {len(x.items)}")
-    if round == 19:
+    if part_A:
         do_output(monkeys, 182293)
-
-do_output(monkeys, 54832778815)
+    else:
+        do_output(monkeys, 54832778815)
 # %%
+
+load_data(True)
+load_data(False)
