@@ -16,7 +16,7 @@ class Monkey:
             if x.startswith('  Starting items:'):
                 self.items = eval("[" + x.split(':')[1].strip(' ') + "]")
             if x.startswith('  Operation:'):
-                self.operation = compile(x.split(':')[1].strip(' '), f"Monkey{self.name}", "exec")
+                self.operation = x.split(':')[1].strip(' ')
             if x.startswith('  Test:'):
                 self.test = x.split(':')[1].strip(' ')
                 divisor = self.test.split(' ')[-1]
@@ -33,7 +33,7 @@ class Monkey:
         new = 0
         for old in self.items:
             self.activity += 1
-            eval(self.operation)
+            exec(self.operation)
             print(f'Worry level is now: {new}')
             new = new // 3
             monkeys[self.test_results[self.test_func(new)]].recieve_item(old)
@@ -41,4 +41,16 @@ class Monkey:
 # %%
 data = [x.strip('\n') for x in open('Puzzle11_input.txt', 'r').readlines()]
 
+monkeys = []
+start = 0
+while True:
+    monkeys.append(Monkey(data[start:start + 6]))
+    start += 1
+    if start >= len(data):
+        break
 
+for round in range(1):
+    for x in monkeys:
+        x.do_turn(monkeys)
+
+# %%
