@@ -6,6 +6,7 @@ class Monkey:
         self.number = int
         self.items = []
         self.activity = 0
+        self.supermodulo = 0
 
         self.test_results = {}
         for x in _6_lines:
@@ -38,10 +39,14 @@ class Monkey:
             # exec(self.operation, {}, {"old": old, "new": new})
             new = eval(self.operation_func.replace('old', str(old)))
             #- print(f'Worry level is now: {new}')
-            new = new // 3
+            
+            # Part A .. Part B doesn't divide by 3
+            #new = new // 3
             #- print(f'Worry has calmed down to: {new}')
             # pass_to = self.test_results[self.test_func(new)]
             pass_to = self.test_results[new % self.divisor == 0]
+
+            new = new % self.supermodulo
             monkeys[pass_to].recieve_item(new)
         self.items = []
 
@@ -55,22 +60,34 @@ start = 0
 while True:
     monkey = Monkey(data[start:start + 6])
     monkeys[monkey.number] = monkey
+    del monkey
     start += 7
     if start >= len(data):
         break
 
-for round in range(20):
-    print(f"Starting round {round}")
+supermodulo = 1
+for x in monkeys:
+    supermodulo *= monkeys[x].divisor
+
+for x in monkeys:
+    monkeys[x].supermodulo = supermodulo
+
+def do_output(monkeys, answer):
+    top_monkeys = sorted([monkeys[x].activity for x in monkeys], reverse=True)
+    shenanigans = top_monkeys[0] * top_monkeys[1]
+    print(f"Monkey Buisness: {shenanigans} - ({answer})")
+
+# Part A - 20, Part B - 10000
+# for round in range(20):
+for round in range(10000):
+    # print(f"Round {round}")
     for n in monkeys:
         x = monkeys[n]
-        print(f"    -- Monkey {x.number} -- Items: {x.items} -- Item: {len(x.items)}")
+        # print(f"    -- Monkey {x.number} -- Items: {x.items} -- Item: {len(x.items)}")
         x.do_turn(monkeys)
+        # print(f"                -- Items: {x.items} -- Item: {len(x.items)}")
+    if round == 19:
+        do_output(monkeys, 182293)
 
-
-top_monkeys = sorted([monkeys[x].activity for x in monkeys], reverse=True)
-
-shenanigans = top_monkeys[0] * top_monkeys[1]
-
-# 276150 is too high
-print(f"Monkey Buisness: {shenanigans} - (182293)")
+do_output(monkeys, 54832778815)
 # %%
